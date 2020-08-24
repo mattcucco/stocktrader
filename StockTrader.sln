@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stocktrader.Models", "stock
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stocktrader.Services", "stocktrader.Services\stocktrader.Services.csproj", "{E72500A3-DC6F-413C-8741-173CA3C851F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stocktrader.Services.Tests", "stocktrader.Services.Tests\stocktrader.Services.Tests.csproj", "{4172F376-AF2D-4788-A912-AEB776A463B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E72500A3-DC6F-413C-8741-173CA3C851F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E72500A3-DC6F-413C-8741-173CA3C851F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E72500A3-DC6F-413C-8741-173CA3C851F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4172F376-AF2D-4788-A912-AEB776A463B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4172F376-AF2D-4788-A912-AEB776A463B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4172F376-AF2D-4788-A912-AEB776A463B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4172F376-AF2D-4788-A912-AEB776A463B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
