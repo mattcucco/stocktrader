@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stocktrader", "stocktrader\stocktrader.csproj", "{519FCE5E-FE19-4701-AB8A-7B51B5690C78}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9E66AC98-E732-49B7-AD38-E7006A26AB91} = {9E66AC98-E732-49B7-AD38-E7006A26AB91}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stocktrader.Models", "stocktrader.Models\stocktrader.Models.csproj", "{9E66AC98-E732-49B7-AD38-E7006A26AB91}"
 EndProject

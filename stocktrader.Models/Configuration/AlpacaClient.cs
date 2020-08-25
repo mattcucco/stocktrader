@@ -1,4 +1,4 @@
-﻿namespace stocktrader.Configuration
+﻿namespace stocktrader.Models.Configuration
 {
     public class AlpacaClient
     {

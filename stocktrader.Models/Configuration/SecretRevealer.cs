@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 
-namespace stocktrader.Configuration
+namespace stocktrader.Models.Configuration
 {
     public interface ISecretRevealer
     {
-        void Reveal();
+        KeyValuePair<string, string> GetAlpacaKeys();
     }
 
     public class SecretRevealer : ISecretRevealer
@@ -17,10 +18,9 @@ namespace stocktrader.Configuration
             AlpacaClient = secrets.Value ?? throw new ArgumentNullException(nameof(secrets));
         }
 
-        public void Reveal()
+        public KeyValuePair<string, string> GetAlpacaKeys()
         {
-            Console.WriteLine($"Secret Key: {AlpacaClient.AlpacaKeyId}");
-            Console.WriteLine($"Secret Value: {AlpacaClient.AlpacaKeyValue}");
+            return KeyValuePair.Create(AlpacaClient.AlpacaKeyId, AlpacaClient.AlpacaKeyValue);
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using stocktrader.Configuration;
+using stocktrader.Models.Configuration;
+using stocktrader.Services;
 using System;
+using System.Threading.Tasks;
 
 namespace stocktrader
 {
@@ -9,13 +11,17 @@ namespace stocktrader
     {
         public static IConfigurationRoot Configuration { get; set; }
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
+        {
+            await ConfigureApp();
+            Console.ReadKey();
+        }
+
+        private static async Task ConfigureApp()
         {
             var env = Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT");
-
             var isDevelopment = string.IsNullOrEmpty(env) ||
                                 env.ToLower() == "development";
-
             var builder = new ConfigurationBuilder();
             builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
@@ -31,13 +37,12 @@ namespace stocktrader
                 .AddOptions()
                 .AddLogging()
                 .AddSingleton<ISecretRevealer, SecretRevealer>()
+                .AddSingleton<TradingService>()
                 .BuildServiceProvider();
 
             var serviceProvider = services.BuildServiceProvider();
-            var revealer = serviceProvider.GetService<ISecretRevealer>();
-
-            revealer.Reveal();
-            Console.ReadKey();
+            var tradingService = serviceProvider.GetService<TradingService>();
+            await tradingService.Init();
         }
     }
 }

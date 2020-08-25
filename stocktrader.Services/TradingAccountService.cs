@@ -11,22 +11,26 @@ namespace stocktrader.Services
     /// Helper class for TradingService. 
     /// Explicitly handles account information from the trading client.
     /// </summary>
-    class TradingAcountService
+    class TradingAccountService
     {
         #region <|| PROPERTIES ||>
         private AlpacaTradingClient TradingClient { get; set; }
-        private IAccount TradingAcount { get; set; }
+        private IAccount TradingAccount { get; set; }
         
         #endregion <|| PROPERTIES ||>
 
         #region <|| CONSTRUCTORS ||> 
-        public TradingAcountService(AlpacaTradingClient client)
+        public TradingAccountService(AlpacaTradingClient client)
         {
             TradingClient = client;
         }
         public async Task Init(CancellationToken cancellationToken = default)
         {
-            TradingAcount = await TradingClient.GetAccountAsync(cancellationToken);
+            Console.WriteLine("Loading Account...");
+            TradingAccount = await TradingClient.GetAccountAsync(cancellationToken);
+            Console.WriteLine($"Acount Status: {TradingAccount.Status}");
+            Console.WriteLine($"Buying Power: {GetAcountTradingPower()}");
+            Console.WriteLine($"Equity: {GetAcountEquity()}");
         }
         #endregion <|| CONSTRUCTORS ||>
 
@@ -34,9 +38,9 @@ namespace stocktrader.Services
 
         public decimal GetAcountTradingPower()
         {
-            if(TradingAcount != null)
+            if(TradingAccount != null)
             {
-                return TradingAcount.BuyingPower;
+                return TradingAccount.BuyingPower;
             }
             else
             {
@@ -45,9 +49,9 @@ namespace stocktrader.Services
         }
         public decimal GetAcountEquity()
         {
-            if (TradingAcount != null)
+            if (TradingAccount != null)
             {
-                return TradingAcount.Equity;
+                return TradingAccount.Equity;
             }
             else
             {

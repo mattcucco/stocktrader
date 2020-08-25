@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Alpaca.Markets;
+using stocktrader.Models.Configuration;
 
 namespace stocktrader.Services
 {
@@ -12,15 +13,19 @@ namespace stocktrader.Services
         #region <|| PROPERTIES ||>
         private AlpacaTradingClient TradingClient { get; set; }
         private AlpacaDataClient DataClient { get; set; }
-        private TradingAcountService AcountService { get; set; }
+        private TradingAccountService AccountService { get; set; }
 
         #endregion <|| PROPERTIES ||>
 
         #region <|| CONSTRUCTORS ||>
-        public TradingService(string key, string value)
+        public TradingService(ISecretRevealer revealer)
         {
-            TradingClient = Alpaca.Markets.Environments.Paper.GetAlpacaTradingClient(new SecretKey(key, value));
-            DataClient = Alpaca.Markets.Environments.Paper.GetAlpacaDataClient(new SecretKey(key, value));
+            var secrets = revealer.GetAlpacaKeys();
+            var key = new SecretKey(secrets.Key, secrets.Value);
+
+            TradingClient = Alpaca.Markets.Environments.Paper.GetAlpacaTradingClient(key);
+            DataClient = Alpaca.Markets.Environments.Paper.GetAlpacaDataClient(key);
+            AccountService = new TradingAccountService(TradingClient);
         }
 
         public void Dispose()
@@ -31,7 +36,20 @@ namespace stocktrader.Services
 
         public async Task Init(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Initializing Bot...");
+
+            var marketStatus = await IsMarketOpen() ? "Open" : "Closed";
+            var timeLeft = await GetTimeUntilMarketClose();
+            var timeClose = await GetNextMarketClose();
+
+            Console.WriteLine($"Market Status: {marketStatus}");
+            Console.WriteLine($"Local Market Close: {timeClose:MM/dd/yyyy hh:mm tt}");
+            Console.WriteLine($"UTC Market Close: {timeClose.ToUniversalTime():MM/dd/yyyy hh:mm tt}");
+            Console.WriteLine($"Time Remaining: {timeLeft.Hours}h:{timeLeft.Minutes}m:{timeLeft.Seconds}s");
+
+            await AccountService.Init(cancellationToken);
+
+            Console.WriteLine("Bot Ready...");
         }
         #endregion <|| CONSTRUCTORS ||>
 
@@ -61,7 +79,8 @@ namespace stocktrader.Services
         }
         public async Task<TimeSpan> GetTimeUntilMarketClose()
         {
-            return await GetNextMarketClose() - DateTime.UtcNow;
+            var nextClose = await GetNextMarketClose();
+            return  nextClose.ToUniversalTime() - DateTime.UtcNow;
         }
         #endregion <|| PUBLIC METHODS ||>
 
