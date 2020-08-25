@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Alpaca.Markets;
 
@@ -9,6 +12,7 @@ namespace stocktrader.Services
         #region <|| PROPERTIES ||>
         private AlpacaTradingClient TradingClient { get; set; }
         private AlpacaDataClient DataClient { get; set; }
+        private TradingAcountService AcountService { get; set; }
 
         #endregion <|| PROPERTIES ||>
 
@@ -25,6 +29,10 @@ namespace stocktrader.Services
             DataClient?.Dispose();
         }
 
+        public async Task Init(CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
         #endregion <|| CONSTRUCTORS ||>
 
         #region <|| PUBLIC METHODS ||>
@@ -42,6 +50,18 @@ namespace stocktrader.Services
         {
             var clock = await TradingClient.GetClockAsync();
             return clock.NextClose;
+        }
+        public async Task DeleteOpenOrders()
+        {
+            var orders = await TradingClient.ListOrdersAsync(new ListOrdersRequest());
+            foreach(var o in orders)
+            {
+                var res = await TradingClient.DeleteOrderAsync(o.OrderId);
+            }
+        }
+        public async Task<TimeSpan> GetTimeUntilMarketClose()
+        {
+            return await GetNextMarketClose() - DateTime.UtcNow;
         }
         #endregion <|| PUBLIC METHODS ||>
 
