@@ -50,6 +50,7 @@ namespace stocktrader.Services
             await AccountService.Init(cancellationToken);
 
             Console.WriteLine("Bot Ready...");
+            await GetSymbols();
         }
         #endregion <|| CONSTRUCTORS ||>
 
@@ -81,6 +82,14 @@ namespace stocktrader.Services
         {
             var nextClose = await GetNextMarketClose();
             return  nextClose.ToUniversalTime() - DateTime.UtcNow;
+        }
+        public async Task GetSymbols()
+        {
+            var symbols = await TradingClient.ListAssetsAsync(new AssetsRequest() {AssetStatus = AssetStatus.Active, AssetClass = AssetClass.UsEquity });
+            foreach(var symbol in symbols.Where(x=> x.IsTradable).Take(10))
+            {
+                Console.WriteLine($"{symbol.Symbol}");
+            }
         }
         #endregion <|| PUBLIC METHODS ||>
 
