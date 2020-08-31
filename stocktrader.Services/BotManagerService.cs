@@ -1,14 +1,33 @@
-﻿using System;
+﻿using stocktrader.Models.Bot;
+using stocktrader.Models.Stocks;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace stocktrader.Models.Bot
+namespace stocktrader.Services
 {
-    public class BotManager
+    public class BotManagerService
     {
         #region <|| PROPERTIES ||>
         private List<StockBot> Bots { get; set; }
+        private Queue<Stock> OrderQueue { get; set; }
+        private TradingService TradingService { get; set; }
+        #endregion
+
+        #region <|| CONSTRUCTORS ||>
+        public BotManagerService(TradingService tradingService)
+        {
+            TradingService = tradingService;
+        }
+        public async Task Init()
+        {
+            Console.WriteLine("Initializing Bot Manager...");
+
+            //Load Accounts
+
+
+        }
         #endregion
 
         #region <|| PUBLIC METHODS ||>

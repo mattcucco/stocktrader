@@ -38,11 +38,12 @@ namespace stocktrader
                 .AddLogging()
                 .AddSingleton<ISecretRevealer, SecretRevealer>()
                 .AddSingleton<TradingService>()
+                .AddSingleton<BotManagerService>()
                 .BuildServiceProvider();
 
             var serviceProvider = services.BuildServiceProvider();
-            var tradingService = serviceProvider.GetService<TradingService>();
-            await tradingService.Init();
+            var botManager = serviceProvider.GetService<BotManagerService>();
+            await botManager.Init();
         }
     }
 }
